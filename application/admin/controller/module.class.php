@@ -8,6 +8,8 @@ class module extends common {
 	private $module;
 	
 	public function init() {
+
+	    echo "1";
 		define('INSTALL', true);
 		$dirs = $dirs_arr = array();
 		$dirs = glob(APP_PATH.'*', GLOB_ONLYDIR);
@@ -15,13 +17,15 @@ class module extends common {
 		foreach ($dirs as $d) {
 			$dirs_arr[] = basename($d);
 		}
-		
+        echo "2";
+
 		$total = count($dirs_arr);
 		$dirs_arr = array_chunk($dirs_arr, 10, true);
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 		$directory = isset($dirs_arr[($page-1)]) ? $dirs_arr[($page-1)] : array();
 		yzm_base::load_sys_class('page','',0);
 		$page = new page($total, 10);
+
 		$data = D('module')->select();
 		foreach($data as $val){
 			$modules[$val['module']] = $val;

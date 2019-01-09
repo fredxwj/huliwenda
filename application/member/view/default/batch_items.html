@@ -8,7 +8,7 @@
     {m:include "member","left"}
     <div class="main_right">
         <div class="tit"><h3>批量投稿</h3></div>
-        <div class="main_cont">文件格式（支持excel文件格式xsl, xslx）,内容如下
+        <div class="main_cont">文件格式（支持excel文件格式xsl, xslx）格式如下 <a href="/uploads/template/huliwenda.xlsx"> <font color="blue">下载模板</font></a>
             <table border="1">
                 <tr>
                     <td>问题标题</td>
@@ -30,13 +30,14 @@
                 </tr>
             </table>
             <br/>
-                批量发布完成，共计{$total}条, 发布成功{$succ}条
+
                 <table>
+                    <tr><td colspan="2"> 批量发布完成，共计<font color="red">{$total}</font>条, 发布成功<font color="red">{$succ}</font>条 </tr>
                     <tr>
                         <td>内容分类：</td>
-                        <td>{$catid} </td>
+                        <td>{get_catname($catid)} </td>
                     </tr>
-                    <tr><td>下载文件：</td><td><a href="{$download}">点击下载</a></td></tr>
+                    <tr><td>下载文件：</td><td><a href="{$download}"><font color="red">点击下载</font></a></td></tr>
                 </table>
         </div>
     </div>
