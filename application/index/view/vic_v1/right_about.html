@@ -1,0 +1,18 @@
+<div class="sidebar">
+    <div class="about">
+      <p class="avatar"> <img src="{SITE_PATH}application/index/view/{C('site_theme')}/images/avatar.jpg" alt="用户头像"> </p>
+      <p class="abname">YzmCMS</p>
+      <p class="abposition">免费又好用的CMS建站系统，就选YzmCMS!</p>
+      <!-- <p class="abtext">{$site[advertise]}</p> -->
+    </div>
+    <div class="weixin">
+      <h2 class="hometitle">关注我们</h2>
+      <ul>
+        {if isset($site['about'])}
+        <li class="wx"><img src="{$site[about]}"></li>
+        {else}
+        请登录后台管理：系统管理->自定义配置->添加配置，配置名称为：" about "，配置类型为图片上传！
+        {/if} 
+      </ul>
+    </div>
+  </div>

@@ -1,0 +1,77 @@
+{m:include "member","header"}
+<link rel="stylesheet" type="text/css" href="{STATIC_URL}plugin/Hui-iconfont/iconfont.min.css" />
+<script type="text/javascript" src="{STATIC_URL}js/yzm_common.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo STATIC_URL;?>plugin/ueditor/1.4.3.3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo STATIC_URL;?>plugin/ueditor/1.4.3.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="<?php echo STATIC_URL;?>plugin/ueditor/1.4.3.3/lang/zh-cn/zh-cn.js"></script>
+<div class="w980 main">
+    {m:include "member","left"}
+    <div class="main_right">
+        <div class="tit"><h3>批量投稿</h3></div>
+        <div class="main_cont">文件格式（支持excel文件格式xsl, xslx）,内容如下
+            <table border="1">
+                <tr>
+                    <td>问题标题</td>
+                    <td>描述</td>
+                    <td>回答1</td>
+                    <td>回答2</td>
+                    <td>回答3</td>
+                    <td>回答4</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>网页标题、描述和关键字怎样写比较好？</td>
+                    <td>众所周知，网站的TDK（标题title，关键词keywords、描述description）在页面中的SEO影响是很大的，如何写呢？</td>
+                    <td>首先确定你的关键词层级架构</td>
+                    <td>确定竞争程度，好的关键词不一定适合你的网站，要选合适的</td>
+                    <td>tdk的写法避免堆砌关键词，title控制在30个字内，description一般控制在70-80</td>
+                    <td>可以很负责的告诉你，如今在tdk内堆砌关键词基本没有好处</td>
+                    <td>...</td>
+                </tr>
+            </table>
+            <br/>
+            <form method="post" action="{U('batch')}" >
+                <table>
+                    <tr>
+                        <td>内容分类：</td>
+                        <td>{$category_data} <span class="red">*</span></td>
+                    </tr>
+                    <tr><td>上传文件：</td><td>{form::attachment('attach')}</td></tr>
+                    <tr><td></td><td><input type="submit" name="dosubmit" class="submit" value="提交"></td></tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function change_model(catid) {
+        if(catid != 0) {
+            document.getElementsByName('catid').value = catid;
+            document.getElementById('catid').value = catid;
+        }
+    }
+
+    function chcekall(){
+        if($("#select").val()=="0"){
+            layer.alert("请选择栏目!");
+            return false;
+        }
+
+        //form必填字段的验证
+        {loop $field_check $k=>$v}
+        {if ($v['isrequired'] && in_array($v['fieldtype'], array('input', 'textarea')))}
+        if($("{$v[fieldtype]}[name='{$k}']").val()==''){
+            layer.alert("{$v[errortips]}");
+            return false;
+        }
+        {/if}
+            {/loop}
+
+                if(UE.getEditor('content').getContent()==''){
+                    layer.alert("内容不能为空!");
+                    return false;
+                }
+            }
+</script>
+{m:include "member","footer"}

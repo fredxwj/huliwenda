@@ -1,0 +1,45 @@
+{m:include "member","header"}
+<link rel="stylesheet" type="text/css" href="{STATIC_URL}plugin/Hui-iconfont/iconfont.min.css" />
+<script type="text/javascript" src="{STATIC_URL}js/yzm_common.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo STATIC_URL;?>plugin/ueditor/1.4.3.3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="<?php echo STATIC_URL;?>plugin/ueditor/1.4.3.3/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="<?php echo STATIC_URL;?>plugin/ueditor/1.4.3.3/lang/zh-cn/zh-cn.js"></script>
+<div class="w980 main">
+    {m:include "member","left"}
+    <div class="main_right">
+        <div class="tit"><h3>批量投稿</h3></div>
+        <div class="main_cont">文件格式（支持excel文件格式xsl, xslx）,内容如下
+            <table border="1">
+                <tr>
+                    <td>问题标题</td>
+                    <td>描述</td>
+                    <td>回答1</td>
+                    <td>回答2</td>
+                    <td>回答3</td>
+                    <td>回答4</td>
+                    <td>...</td>
+                </tr>
+                <tr>
+                    <td>网页标题、描述和关键字怎样写比较好？</td>
+                    <td>众所周知，网站的TDK（标题title，关键词keywords、描述description）在页面中的SEO影响是很大的，如何写呢？</td>
+                    <td>首先确定你的关键词层级架构</td>
+                    <td>确定竞争程度，好的关键词不一定适合你的网站，要选合适的</td>
+                    <td>tdk的写法避免堆砌关键词，title控制在30个字内，description一般控制在70-80</td>
+                    <td>可以很负责的告诉你，如今在tdk内堆砌关键词基本没有好处</td>
+                    <td>...</td>
+                </tr>
+            </table>
+            <br/>
+                批量发布完成，共计{$total}条, 发布成功{$succ}条
+                <table>
+                    <tr>
+                        <td>内容分类：</td>
+                        <td>{$catid} </td>
+                    </tr>
+                    <tr><td>下载文件：</td><td><a href="{$download}">点击下载</a></td></tr>
+                </table>
+        </div>
+    </div>
+</div>
+
+{m:include "member","footer"}

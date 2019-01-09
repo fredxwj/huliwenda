@@ -1,0 +1,76 @@
+<header> 
+  <!--menu begin-->
+  <div class="menu">
+    <nav class="nav" id="topnav">
+      <li><a href="{SITE_URL}">{$site[site_name]}</a> </li>
+{m:nav field="catid,catname,arrchildid,pclink,type" where="parentid=0" limit="20"}
+	{loop $data $v}
+      <li><a{if isset($catid) && $v['catid']==$catid} class="current" {/if} href="{$v[pclink]}" {if $v['type']==2} target="_blank" {/if}>{$v[catname]}</a>
+			<!-- 这里是二级栏目的循环，不需要的可以删除，代码开始 -->
+			{if $v['arrchildid']!=$v['catid']} 
+			{php $r = get_childcat($v['catid']);}
+        <ul class="sub-nav">
+          {loop $r $v}
+				<li><a href="{$v[pclink]}">{$v[catname]}</a></li>
+				{/loop}	
+        </ul>
+     {/if}
+			<!-- 这里是二级栏目的循环，不需要的可以删除，代码结束 -->
+		</li>		
+	{/loop}	
+      <!--search begin-->
+      <!-- <div id="search_bar" class="search_bar">
+        <form  id="searchform" action="{SITE_URL}index.php" method="get" name="searchform">
+          <input class="input" placeholder="想搜点什么呢..." type="text" name="q" required="required" id="keyboard">
+          <input type="hidden" name="m" value="search" />
+          <input type="hidden" name="c" value="index" />
+          <input type="hidden" name="a" value="init" />
+          <input type="hidden" name="modelid" value="1" id="modelid" />
+          <span class="search_ico"></span>
+        </form>
+  		  <i class="fa"></i>
+      </div> -->
+      <!--search end-->  <!--mnav end-->
+        <!--mini登陆条-->
+        <div id="head_login">
+            <div class="w1000">
+                <div id="mini">
+                    {if intval(get_cookie('_userid'))==0}
+                    <a href="{U('member/index/register')}" target="_blank">注册</a> <a href="{U('member/index/login')}"  target="_blank">登录</a>
+                    {else}
+                    你好：{safe_replace(get_cookie('_username'))}，<a href="{U('member/index/init')}">会员中心</a> <a href="{U('member/index/logout')}">退出</a>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </nav>
+  </div>
+  <!--menu end--> 
+  <!--mnav begin-->
+  <div id="mnav">
+    <h2><a href="{SITE_URL}" class="mlogo">{$site[site_name]}</a><span class="navicon"></span></h2>
+    <dl class="list_dl">
+      <dt class="list_dt"> <a class="current" href="{SITE_URL}">网站首页</a> </dt>
+{m:nav field="catid,catname,arrchildid,pclink,type" where="parentid=0" limit="20"}
+	{loop $data $v}
+      <dt class="list_dt"> <a href="{$v[pclink]}" {if $v['type']==2} target="_blank" {/if}>{$v[catname]}</a> 
+	  </dt>
+<!-- 这里是二级栏目的循环，不需要的可以删除，代码开始 -->
+			{if $v['arrchildid']!=$v['catid']} 
+      			{php $r = get_childcat($v['catid']);}
+
+            <dd class="list_dd">
+              <ul>
+      		    {loop $r $v}
+      				<li><a href="{$v[pclink]}">{$v[catname]}</a></li>
+      				{/loop}
+              </ul>
+            </dd>
+      {/if}
+			<!-- 这里是二级栏目的循环，不需要的可以删除，代码结束 -->
+{/loop}	
+
+    </dl>
+  </div>
+
+</header>

@@ -1,0 +1,43 @@
+﻿模板说明：
+模板要求：YzmCMS版本 >= v5.0
+
+安装方法：
+解压压缩包，将目录“vic_v1” 放到 YZMCMS安装目录的 \application\index\view 路径中。
+
+管理后台地址：“你的网址/admin”！
+
+选择模板：
+	进入后台 > 系统设置 > 附加设置 > 模板风格 >选择 vic_v1保存，然后点击页面右上角“清除缓存”！！
+
+当前版本仅包含：
+	文章频道页模板(category_article.html)
+	图文列表页模板(list_article_img.html)
+	图片列表页模板(list_article.html)
+	时间线文字列表模板(list_time.html)
+	文章内容页模板(show_article.html)
+	单页模板(category_page.html)
+	留言模板（guestbook.html）
+	搜索页模板（search.html）
+	首页模板(index.html)
+	公用头部模板(header.html)
+	公用底部模板(footer.html)
+	单页模板右侧（right_about.html）
+关于模板：
+	首页调用的是轮播图，请登录管理后台 -> 模块管理 -> 轮播图管理 -> 添加即可。
+	列表中banner部分设置了栏目图片调用，当栏目图片为空的时候这里不显示。
+
+模板贡献人：
+	孤木轻舟(http://wzhao.com/)
+
+YzmCMS官方后期优化，详细效果见站点：
+	http://vic.yzmcms.com/
+
+关于链接：
+	您使用YZMCMS内容管理系统，保留一个官方链接不过分！
+	使用模板贡献人辛苦做的模板，保留一个链接也不过分！
+	当然假如实在不愿意保留我的链接，那么请删除它，有颗感恩的心就好！
+
+版权所有: 袁志蒙工作室，并保留所有权利。
+官方网址: http://www.yzmcms.com
+官方论坛: http://bbs.yzmcms.com
+官方QQ交流群：161208398
