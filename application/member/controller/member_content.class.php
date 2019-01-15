@@ -168,6 +168,9 @@ class member_content extends common{
 		$fields = array('title','copyfrom','catid','thumb','description','content');
 
 		if(isset($_POST['dosubmit'])) {
+		    //在问答的时候，没有content数据
+            $_POST['content'] = isset($_POST['content']) ? $_GET['catid'] : "";
+
             //会员权限-投稿免审核
             $is_adopt = strpos($groupinfo['authority'], '4') === false ? 0 : 1;
             $id = $this->publish_item($_POST);
