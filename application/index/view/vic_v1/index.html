@@ -19,9 +19,9 @@
 </head>
 <body>
 {m:include "index","header"} 
-<article> 
+<article>
   <!--banner begin-->
- <div class="picsbox"> 
+ <!--<div class="picsbox">
   <div class="banner">
     <div id="banner" class="fader">
 {m:banner field="title,image,url,typeid,status" limit="10"}
@@ -36,9 +36,9 @@
         </ul>
       </div>
     </div>
-  </div>
+  </div>-->
   <!--banner end-->
-  <div class="toppic">
+  <!--<div class="toppic">
   {m:lists field="title,thumb,url,catid" modelid="1" flag="1" limit="2"}
         {loop $data $v}
     <li> <a href="{$v[url]}" target="_blank" title="{$v[title]}"> <i><img src="{$v[thumb]}" alt="{$v[title]}"></i>
@@ -46,7 +46,7 @@
       <span>{get_catname($v['catid'])}</span> </a> </li>
 	{/loop}
   </div>
-  </div>
+  </div>-->
   <div class="blank"></div>
   <!--blogsbox begin-->
   <div class="blogsbox">

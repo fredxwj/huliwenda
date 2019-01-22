@@ -9,7 +9,6 @@ class module extends common {
 	
 	public function init() {
 
-	    echo "1";
 		define('INSTALL', true);
 		$dirs = $dirs_arr = array();
 		$dirs = glob(APP_PATH.'*', GLOB_ONLYDIR);
@@ -17,7 +16,6 @@ class module extends common {
 		foreach ($dirs as $d) {
 			$dirs_arr[] = basename($d);
 		}
-        echo "2";
 
 		$total = count($dirs_arr);
 		$dirs_arr = array_chunk($dirs_arr, 10, true);

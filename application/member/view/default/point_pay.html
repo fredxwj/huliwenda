@@ -7,7 +7,7 @@
 	  <form method="post" action="{U('create_order')}" onsubmit="return chcekall()" target="_blank">
 	  <table>
 	   <tr><td>剩余积分：</td><td><span class="red point">{$point}</span></td></tr>
-	   <tr><td>充值金额：</td><td><input type="money" name="money" required value="30" class="input" style="width:50px"> 元 <span class="red">1元人民币可充值 {get_config('rmb_point_rate')} 点积分</span></td></tr>
+	   <tr><td>充值金额：</td><td><input type="money" name="money" required value="50" class="input" style="width:50px"> 元 <span class="red">1元人民币可充值 {get_config('rmb_point_rate')} 点积分</span></td></tr>
 	   <tr><td>支付方式：</td>
 	   <td>
 	   {loop $data $key $val}

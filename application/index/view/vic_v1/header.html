@@ -1,4 +1,13 @@
-<header> 
+<header>
+  <!--head begin-->
+  <!--<div class="bar">
+    <div class="nav">
+        <div class="">
+            <img src="<?php echo STATIC_URL.'images/huli1.png'.$val['logo']?>" height="60"/>
+
+        <span>狐狸问答</span></div>
+    </div>
+  </div>-->
   <!--menu begin-->
   <div class="menu">
     <nav class="nav" id="topnav">
@@ -32,20 +41,22 @@
       </div> -->
       <!--search end-->  <!--mnav end-->
         <!--mini登陆条-->
-        <div id="head_login">
-            <div class="w1000">
-                <div id="mini">
-                    {if intval(get_cookie('_userid'))==0}
-                    <a href="{U('member/index/register')}" target="_blank">注册</a> <a href="{U('member/index/login')}"  target="_blank">登录</a>
-                    {else}
-                    你好：{safe_replace(get_cookie('_username'))}，<a href="{U('member/index/init')}">会员中心</a> <a href="{U('member/index/logout')}">退出</a>
-                    {/if}
+    <div id="head_login">
+                <div class="w1000">
+                    <div id="mini">
+                        {if intval(get_cookie('_userid'))==0}
+                        <a href="{U('member/index/register')}" target="_blank">注册</a> <a href="{U('member/index/login')}"  target="_blank">登录</a>
+                        {else}
+                        你好：{safe_replace(get_cookie('_username'))}，<a href="{U('member/index/init')}">会员中心</a> <a href="{U('member/index/logout')}">退出</a>
+                        {/if}
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
+
   </div>
-  <!--menu end--> 
+  <!--menu end-->
+
   <!--mnav begin-->
   <div id="mnav">
     <h2><a href="{SITE_URL}" class="mlogo">{$site[site_name]}</a><span class="navicon"></span></h2>

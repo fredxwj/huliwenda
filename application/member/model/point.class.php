@@ -50,14 +50,16 @@ class point {
 		$data['ip'] = getip();
 		$data['adminnote'] = $adminnote;
 		if($type == 1) $data['status'] = 1;
-		
+
+        $sign = '+';
+        if ($pay_type == 2) $sign = '-'; //如果是发帖，减少积分
 		//自增积分/金钱或经验
-		$update = $type == '1' ? '`point`=`point`-'.$value : '`amount`=`amount`+'.$value;
+		$update = $type == '1' ? '`point`=`point`'.$sign.$value : '`amount`=`amount`'.$sign.$value;
 		
 		//若有修改经验
 		if($mod_experience){
 			//增加经验数量
-			$update .= ',`experience`=`experience`-'.$value;
+			$update .= ',`experience`=`experience`+'.$value;
 			
 			if(!$experience) $experience = D('member')->field('experience')->where(array('userid' => $userid))->one();
 			//检查并更新会员组
@@ -67,7 +69,6 @@ class point {
 		D('member')->update($update, array('userid'=>$userid)); 
 		D('pay')->insert($data);
 	}
-	
 	
 	/**
 	 * 消费积分/金钱记录

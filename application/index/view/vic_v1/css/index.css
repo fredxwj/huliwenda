@@ -4,6 +4,7 @@
  * @author           袁志蒙  
  * @license          http://www.yzmcms.com
  */
+.article { height:100%; width: 100%;margin: 0 auto; }
 .picsbox { width: 100%; overflow: hidden; position: relative; }
 /*banner*/
 .banner { width: 66%; overflow: hidden; float: left }

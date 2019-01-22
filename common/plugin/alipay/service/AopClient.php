@@ -675,11 +675,10 @@ class AopClient {
 		($res) or die('支付宝RSA公钥错误。请检查公钥文件格式是否正确');  
 
 		//调用openssl内置方法验签，返回bool值
-
 		if ("RSA2" == $signType) {
-			$result = (bool)openssl_verify($data, base64_decode($sign), $res, OPENSSL_ALGO_SHA256);
+			$result = openssl_verify($data, base64_decode($sign), $res, OPENSSL_ALGO_SHA256);
 		} else {
-			$result = (bool)openssl_verify($data, base64_decode($sign), $res);
+			$result = openssl_verify($data, base64_decode($sign), $res);
 		}
 
 		if(!$this->checkEmpty($this->alipayPublicKey)) {

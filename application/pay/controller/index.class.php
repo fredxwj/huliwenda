@@ -46,12 +46,31 @@ class index{
 	public function pay_return(){
 		yzm_base::load_common('plugin/alipay/returnpay.php');
 		$result = returnpay::check($_GET);
+        $this->pay_succ($_GET['out_trade_no']);
+
 		if($result){
 			showmsg('支付成功，正在返回会员中心！', U('member/index/init'), 2);
 		}else{
-			showmsg('支付校验失败！', 'stop');
+			showmsg('支付校验失败！'.implode(",", $_GET), 'stop');
 		}
 	}
+
+	public function pay_succ($trade_no){
+        $order = D('order')->field('id,order_sn,status,userid,username,paytype,money,quantity,`desc`')->where(array('order_sn' => $trade_no))->find();
+        if(!$order)
+            return -1;
+        $order_params = array(
+            'out_trade_no' => $order['order_sn'],
+            'total_amount' => $order['money'],
+            'status'       => $order['status'],
+            'id'           => $order['id']
+        );
+
+        // 验签和参数校检
+
+        $payment = new payment();//M('payment');
+        $payment->update_order($order, $trade_no);
+    }
 
 
 
