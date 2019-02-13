@@ -95,16 +95,16 @@ header, .blogsbox, .banner { width: 100%; margin: auto; }
 .menu { width: 90%; display: none; }
 #mnav { display: block; z-index: 99999;  }
 .search_bar, .toppic { display: none }
-article { width: 90%; margin: 70px auto 0 }
+article { width: 90%; margin: 50px auto 0 }
 .imginfo { font-size: 18px; bottom: 22%; }
 .bloginfo { width: 100%; clear: both; }
-.blogs .blogpic { width: 100%; height: auto; margin-bottom: 10px }
+.blogs .blogpic { width: 30%; height: auto; margin-bottom: 10px; float: right; }
 .fader { padding-top: 60%; width: 100% }
 .bloginfo ul li { margin-right: 10px }
 .bplist li img { height: 100px }
 .bplist li { height: 100px }
 .bigpic img { height: auto }
-.blogs .blogtext { width: 100%; }
+.blogs .blogtext {  }
 .bloginfo ul li { background-image: none }
 .bloginfo .author, .bloginfo .lmname { display: none }
 .bplist li:nth-child(2) { margin: 0 0 0 2px }
