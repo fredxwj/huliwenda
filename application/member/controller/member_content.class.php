@@ -11,6 +11,7 @@ yzm_base::load_controller('common', 'member', 0);
 yzm_base::load_sys_class('page','',0);
 
 require_once 'third/PHPExcel-1.8/PHPExcel.php';
+require_once 'third/baixingzhidao.php';
 
 class member_content extends common{
 	
@@ -100,7 +101,8 @@ class member_content extends common{
         $sheet = $objPHPExcel->getSheet(0);
         $highestRow = $sheet->getHighestRow();
         $highestColumn = $sheet->getHighestColumn();
-        $newRow = hex2bin(bin2hex($highestColumn) + 1);
+        $urlRow = hex2bin(bin2hex($highestColumn) + 1);
+        $bxurlRow = hex2bin(bin2hex($highestColumn) + 2);
 
         // 获取一行的数据, 这里是标题
         $rowData = $sheet->rangeToArray('A1' . ':' . $highestColumn .'1', NULL, TRUE, FALSE);
@@ -128,6 +130,8 @@ class member_content extends common{
             $this->_adopt($content_tabname, $catid, $id);
             $url = $this->get_url(true, $catid, $id);
 
+            $bxid = postBaixingQA($data['title'], $data['description'], array_slice($rowData[0],2),'');
+
             for($i=2; $i<sizeof($rowData[0]); $i++){
                 if ( strlen($rowData[0][$i]) > 10 ) { //判断评论长度要超过5个字
                     $cid = $this->post_comment($id, $catid, $modelid, rand(1,$max_tmp_user_id), $rowData[0][$i]);
@@ -138,9 +142,14 @@ class member_content extends common{
                 $succ = $succ + 1;
             }
 
-            //写入到excel中
-            $cell = $newRow.$row;
+            //写入狐狸到excel中
+            $cell = $urlRow.$row;
             $sheet->setCellValue($cell, $url);
+
+            //写入bx知道到excel中
+            $bxurl = 'http://zhidao.baixing.com/question/'.$bxid.'.html';
+            $bxcell = $bxurlRow.$row;
+            $sheet->setCellValue($bxcell, $bxurl);
         }
 
         $arr = [];
@@ -151,6 +160,30 @@ class member_content extends common{
         return $arr;
     }
 
+    public function baidu_push($urls){
+        if(!empty($urls)){
+            $baidu_push_token = get_config('baidu_push_token');
+            if(!$baidu_push_token) showmsg('token值为空，请到系统设置中配置！', 'stop');
+            $api_url = 'http://data.zz.baidu.com/urls?site='.HTTP_HOST.'&token='.$baidu_push_token;
+            $ch = curl_init();
+            $options =  array(
+                CURLOPT_URL => $api_url,
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POSTFIELDS => implode("\n", $urls),
+                CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+            );
+            curl_setopt_array($ch, $options);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($result, true);
+            if(isset($result['success'])){
+                showmsg('发布并且成功推送'.$result['success'].'条URL地址到百度！', '', 2);
+            }else{
+                showmsg('推送失败，错误码：'.$result['error'], 'stop');
+            }
+        }
+    }
 
 	/**
 	 * 在线投稿-发布稿件
@@ -169,17 +202,20 @@ class member_content extends common{
 
 		if(isset($_POST['dosubmit'])) {
 		    //在问答的时候，没有content数据
-            $_POST['content'] = isset($_POST['content']) ? $_GET['catid'] : "";
+            $_POST['content'] = isset($_POST['content']) ? $_POST['content'] : "";
 
             //会员权限-投稿免审核
             $is_adopt = strpos($groupinfo['authority'], '4') === false ? 0 : 1;
             $id = $this->publish_item($_POST);
 
+            $bxid = postBaixingQA($_POST['title'], $_POST['description'], array($_POST['content']),'');
+
+
             if (!$is_adopt) {
-                showmsg('发布成功，等待管理员审核！', U('not_pass'));
+                showmsg('发布成功，等待管理员审核！'.$bxid, U('not_pass'));
             } else {
                 $this->_adopt($content_tabname, $catid, $id);
-                showmsg('发布成功，内容已通过审核！', U('pass'));
+                showmsg('发布成功，内容已通过审核！'.$bxid, U('pass'));
             }
         }
 	}
@@ -554,6 +590,7 @@ class member_content extends common{
 		}
 
 		$content_tabname->update(array('url' => $url), array('id' => $id));
+        //$this->baidu_push(array($url));
 		
 		//投稿奖励积分和经验
 		$publish_point = get_config('publish_point');

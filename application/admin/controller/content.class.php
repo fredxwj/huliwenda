@@ -180,9 +180,8 @@ class content extends common {
 		}
 	}
 
-	
-	
-	/**
+
+    /**
 	 * 移动分类
 	 */
 	public function remove() {

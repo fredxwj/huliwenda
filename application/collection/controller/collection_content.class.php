@@ -271,7 +271,9 @@ class collection_content extends common {
 		
 		$i = 0;
 		foreach($res as $v){
-			if($v['status'] != 1) continue;
+            #showmsg($v['status'].'  '.$v['data'], U('collection_list'));
+
+            if($v['status'] != 1) continue;
 			
 			$data = array_merge($data, string2array($v['data']));
 			if(!$data['content']) continue;
@@ -289,6 +291,8 @@ class collection_content extends common {
 			
 			$data['updatetime'] = $data['inputtime'];
 			$data['seo_title'] = $data['title'].'_'.$site_name;
+            #showmsg( implode(" ",$data), U('collection_list'));
+
 			$id = $content_tabname->insert($data);
 		
 			$url = $this->get_url($data['catid'], $id);
@@ -331,7 +335,7 @@ class collection_content extends common {
 		
 		$collection_content = D('collection_content');
 		$total = $collection_content->where($where)->total();
-		$page = new page($total, 10);
+		$page = new page($total, 100);
 		$data = $collection_content->where($where)->order('id DESC')->limit($page->limit())->select();		
 		include $this->admin_tpl('collection_list');
 	}
