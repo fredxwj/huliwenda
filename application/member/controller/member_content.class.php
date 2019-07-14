@@ -104,6 +104,12 @@ class member_content extends common{
         $urlRow = hex2bin(bin2hex($highestColumn) + 1);
         $bxurlRow = hex2bin(bin2hex($highestColumn) + 2);
 
+        $memberinfo = $this->memberinfo;
+        if ($memberinfo['point'] < $highestRow ){
+            showmsg('积分不足, 请移步到充值中心！', U('/member/member_pay/pay'));
+            return;
+        }
+
         // 获取一行的数据, 这里是标题
         $rowData = $sheet->rangeToArray('A1' . ':' . $highestColumn .'1', NULL, TRUE, FALSE);
         for ($idx = 1; $idx <= $highestColumn; $idx++){
@@ -126,11 +132,22 @@ class member_content extends common{
             $data['catid'] = $catid;
             $data['copyfrom'] = '原创';
             $data['thumb'] = '';
-            $id = $this->publish_item($data);
-            $this->_adopt($content_tabname, $catid, $id);
-            $url = $this->get_url(true, $catid, $id);
 
             $bxid = postBaixingQA($data['title'], $data['description'], array_slice($rowData[0],2),'');
+            $bxinfo = "发布到百姓知道失败，存在违禁词".$bxid;
+            $bxurl = '';
+            $charge = False;
+
+            if ($bxid) {
+                $bxinfo = "发布到百姓知道成功，id为" . $bxid;
+                $bxurl = 'http://zhidao.baixing.com/question/' . $bxid . '.html';
+                $charge = True;
+            }
+
+            $data['urls'] = $bxurl;
+            $id = $this->publish_item($data);
+            $this->_adopt($content_tabname, $catid, $id, $charge);
+            $url = $this->get_url(true, $catid, $id);
 
             for($i=2; $i<sizeof($rowData[0]); $i++){
                 if ( strlen($rowData[0][$i]) > 10 ) { //判断评论长度要超过5个字
@@ -147,7 +164,6 @@ class member_content extends common{
             $sheet->setCellValue($cell, $url);
 
             //写入bx知道到excel中
-            $bxurl = 'http://zhidao.baixing.com/question/'.$bxid.'.html';
             $bxcell = $bxurlRow.$row;
             $sheet->setCellValue($bxcell, $bxurl);
         }
@@ -192,6 +208,11 @@ class member_content extends common{
 		$memberinfo = $this->memberinfo;
 		extract($memberinfo);
 
+		if ($memberinfo['point'] <=0 ){
+            showmsg('积分不足, 请移步到充值中心！', U('/member/member_pay/pay'));
+            return;
+        }
+
 		$groupinfo = $this->_check_group_auth($groupid);
         $catid = intval($_POST['catid']);
         $modelid = get_category($catid, 'modelid');
@@ -206,16 +227,27 @@ class member_content extends common{
 
             //会员权限-投稿免审核
             $is_adopt = strpos($groupinfo['authority'], '4') === false ? 0 : 1;
-            $id = $this->publish_item($_POST);
 
             $bxid = postBaixingQA($_POST['title'], $_POST['description'], array($_POST['content']),'');
+            $bxinfo = "发布到百姓知道失败，存在违禁词".$bxid;
+            $bxurl ='';
+            $charge = False;
 
+            if ($bxid) {
+                $bxinfo = "发布到百姓知道成功，id为".$bxid;
+                $bxurl = 'http://zhidao.baixing.com/question/'.$bxid.'.html';
+                $charge = True;
+            }
+
+            $_POST['urls'] = $bxurl;
+
+            $id = $this->publish_item($_POST);
 
             if (!$is_adopt) {
-                showmsg('发布成功，等待管理员审核！'.$bxid, U('not_pass'));
+                showmsg('发布成功，等待管理员审核！'.$bxinfo, U('not_pass'));
             } else {
                 $this->_adopt($content_tabname, $catid, $id);
-                showmsg('发布成功，内容已通过审核！'.$bxid, U('pass'));
+                showmsg('发布成功，内容已通过审核！'.$bxinfo, U('pass'));
             }
         }
 	}
@@ -290,7 +322,7 @@ class member_content extends common{
 			$_POST['status'] = $is_adopt;	
 			
 			if($content_tabname->update($_POST, array('id' => $id))){
-				$member_content->update($_POST, array('checkid' =>$modelid.'_'.$id));	//更新会员内容表
+				$member_content->update($_POST, array('checkid' =>$modelid.'_'.$id, 'docid' =>$id));	//更新会员内容表
 				if(!$is_adopt){
 					showmsg('操作成功，等待管理员审核！', U('not_pass'));
 				}else{
@@ -321,7 +353,7 @@ class member_content extends common{
 		$member_content = D('member_content');
 		$total = $member_content->where(array('userid' =>$userid,'status' =>1))->total();
 		$page = new page($total, 10);
-		$res = $member_content->field('checkid,catid,title,inputtime,updatetime')->where(array('userid' =>$userid,'status' =>1))->order('updatetime DESC')->limit($page->limit())->select();
+		$res = $member_content->alias('a')->field('a.checkid,a.catid,a.title,a.inputtime,a.updatetime,b.urls')->join('yzmcms_article b ON a.docid=b.id')->where(array('a.userid' =>$userid,'a.status' =>1))->order('updatetime DESC')->limit($page->limit())->select();
 		$data = array();
 		foreach($res as $val) {
 			list($val['modelid'], $val['id']) = explode('_', $val['checkid']);
@@ -484,7 +516,7 @@ class member_content extends common{
 
         $groupinfo = $this->_check_group_auth($groupid);
         //会员中心可发布的字段
-        $fields = array('title','copyfrom','catid','thumb','description','content');
+        $fields = array('title','copyfrom','catid','thumb','description','content', 'urls');
 
         $catid = intval($data['catid']);
 
@@ -538,6 +570,7 @@ class member_content extends common{
 
         //发布到用户内容列表中
         $data['checkid'] = $modelid.'_'.$id;
+        $data['docid'] = $id;
         D('member_content')->insert($data);
 
         return $id;
@@ -581,7 +614,7 @@ class member_content extends common{
 	 * @param $catid 
 	 * @param $id 
 	 */		
-	private function _adopt($content_tabname, $catid, $id){
+	private function _adopt($content_tabname, $catid, $id, $charge=True){
 		if(get_config('url_rule')){
 			$catinfo = get_category($catid);
 			$url = URL_MODEL == 1 ? SITE_URL.'index.php?s=/'.$catinfo['catdir'].'/'.$id.C('url_html_suffix') : SITE_URL.$catinfo['catdir'].'/'.$id.C('url_html_suffix');
@@ -593,10 +626,12 @@ class member_content extends common{
         //$this->baidu_push(array($url));
 		
 		//投稿奖励积分和经验
-		$publish_point = get_config('publish_point');
-		if($publish_point > 0){
-			M('point')->point_add(1, $publish_point, 2, $this->memberinfo['userid'], $this->memberinfo['username'], $this->memberinfo['experience'], $catid.'_'.$id);
-		}
+        if($charge) {
+            $publish_point = get_config('publish_point');
+		    if ($publish_point > 0) {
+                M('point')->point_add(1, $publish_point, 2, $this->memberinfo['userid'], $this->memberinfo['username'], $this->memberinfo['experience'], $catid . '_' . $id);
+            }
+        }
 	}
 
     /**

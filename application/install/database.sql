@@ -128,6 +128,7 @@ CREATE TABLE `yzm_article` (
   `copyfrom` varchar(50) NOT NULL DEFAULT '',
   `thumb` varchar(100) NOT NULL DEFAULT '',
   `url` varchar(100) NOT NULL DEFAULT '',
+  `urls` varchar(300) NOT NULL DEFAULT '',
   `flag` varchar(12) NOT NULL DEFAULT '' COMMENT '1置顶,2头条,3特荐,4推荐,5热点,6幻灯,7跳转',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `system` tinyint(1) unsigned NOT NULL DEFAULT '0',

@@ -70,6 +70,7 @@ class article{
 
             //发布到用户内容列表中
             $data['checkid'] = $modelid . '_' . $id;
+            $data['docid'] = $id;
             D('member_content')->insert($data);
 
             $url = $this->get_url(true, $data['catid'], $id);

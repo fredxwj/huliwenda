@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="944e5f82-57e1-4d20-910d-418593bf23ea" name="huliwenda2" url="http:// wjxing12334.ftp01.bcehost.com">
+        <fileTransfer host=" wjxing12334.ftp01.bcehost.com" port="8010">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="8010" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
